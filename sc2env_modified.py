@@ -225,11 +225,21 @@ class SC2Env(environment.Base):
     """Look at Features for full specs."""
     return self._features.observation_spec()
 
-  def observation(self):
+
+  def observation_raw(self):
     """
     Added by @danielfirebanks
-    Return observation object"""
-    return self._controllers[0].observe()
+    Returns an ObservationRaw object of the current state of the game
+    This contains:
+
+      - (PlayerRaw) player
+      - (list of Unit) units
+      - (MapState) map_state
+      - (Event) event
+      - (Effect) effects
+
+    """
+    return self._controllers[0].observe().observation.raw_data
 
   def action_spec(self):
     """Look at Features for full specs."""
@@ -260,7 +270,6 @@ class SC2Env(environment.Base):
     if action_id in self._features.available_actions(self._obs[0].observation):
       return True
     return False
-
 
   def transform_raw(self, func_call):
     """
