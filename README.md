@@ -14,5 +14,6 @@ Modifications:
 - Created method raw_obs() that returns an observation in the form of a dictionary, containing all the important information that an agent could use to interact with the raw interface, such as unit tags, 2D map positions, etc.
 
 TODO
+- [ ] Add calls to cmd_raw_unit() in actions_modified, in the list FUNCTIONS
 - [ ] Fix run_loop_modified and figure out how to read multiple action requests in one step call
 - [ ] Figure out how to make several agents get selected and appended to the unit_tags list of an ActionRaw, such that they can all perform the same action
