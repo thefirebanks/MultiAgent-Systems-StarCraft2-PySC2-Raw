@@ -76,10 +76,6 @@ def main():
       # Access an observation for the current state of the game
       envobs = env.observation_raw()
 
-      #print("Observation type is:", type(envobs.observation))
-      #print("First Unit type is:", type(envobs.observation.raw_data.units[0]))
-      # print("First Unit is:")
-
       # Accessing set of unit objects
       units = envobs.units
 
@@ -89,18 +85,10 @@ def main():
           if unit.owner == 1: # owner is player
               self_units.append(unit)
 
-      # Check that it actually worked (IT DID!)
-      #print(self_units)
-      #print("Length is", len(self_units))
-
       # Accessing the first unit object
-      #print(envobs.observation.raw_data.units[0])
       own_id = self_units[0].tag
       target_id = self_units[1].tag  # Unit id
       print(own_id, target_id)
-
-      # This is supposed to print available actions SOMEHOW
-      # obs_printer = available_actions_printer.AvailableActionsPrinter(env)
 
       # Send a raw action to kill other marine
       step_result = env.step(actions=[sc2_actions.FunctionCall(_SELECT_UNIT, [_NOT_QUEUED, [own_id], [target_id]])])

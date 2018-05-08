@@ -13,6 +13,9 @@
 # limitations under the License.
 """Define the static list of types and actions for SC2."""
 
+#TODO Find a way of checking available actions (?)
+# TODO FIGURE OUT HOW TO SEND MULTIPLE ACTIONS PER UNIT 
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -140,7 +143,7 @@ def cmd_raw_map(action, ability_id, queued, select_unit_id, screen):
     raw_act.ability_id = ability_id
     raw_act.unit_tags.append(select_unit_id)
     raw_act.queue_command = queued
-    raw_act.target_world_space_pos = screen
+    screen.assign_to(raw_act.target_world_space_pos)
 
 def cmd_raw_autocast(action, ability_id, select_unit_id):
     """Added by @danielfirebanks
@@ -200,6 +203,7 @@ class ArgumentType(collections.namedtuple(
     return cls(id_, name, sizes, None)
 
 
+
 class Arguments(collections.namedtuple("Arguments", [
     "screen", "minimap", "screen2", "queued", "control_group_act",
     "control_group_id", "select_point_act", "select_add", "select_unit_act",
@@ -230,8 +234,8 @@ class Arguments(collections.namedtuple("Arguments", [
   def types(cls, **kwargs):
     """Create an Arguments of the possible Types."""
 
-    #for name, type_ in six.iteritems(kwargs):
-     #   print("Name is", name, "Type_ is", type_, "TYPES ->", type(name), type(type_))
+    # for name, type_ in six.iteritems(kwargs):
+    #    print("Name is", name, "Type_ is", type_, "TYPES ->", type(name), type(type_))
     named = {name: type_._replace(id=Arguments._fields.index(name), name=name)
              for name, type_ in six.iteritems(kwargs)}
 

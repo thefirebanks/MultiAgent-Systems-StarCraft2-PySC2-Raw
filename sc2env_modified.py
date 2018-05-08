@@ -225,7 +225,6 @@ class SC2Env(environment.Base):
     """Look at Features for full specs."""
     return self._features.observation_spec()
 
-
   def observation_raw(self):
     """
     Added by @danielfirebanks
@@ -240,6 +239,72 @@ class SC2Env(environment.Base):
 
     """
     return self._controllers[0].observe().observation.raw_data
+
+  def raw_obs(self):
+    """
+      Added by @danielfirebanks
+      Returns a dictionary containing important information from the original raw observation object
+      Dictionary contains:
+        - Raw observation object
+        - List of unit objects
+        - List of own, ally, neutral and enemy unit objects
+        - List of own, ally, neutral and enemy unit tags
+        - List of own, ally, neutral and enemy unit positions as a coordinate [x, y] of integers
+
+      TODO: Add other important features from the observation, like the map state or an event
+    """
+
+    # Original full raw observation object
+    obs = self._controllers[0].observe().observation.raw_data
+
+    observation = {}
+
+    observation["raw"] = obs
+    observation["units"] = obs.units
+
+    # Unit objects
+    observation["own_units"] = []
+    observation["ally_units"] = []
+    observation["neutral_units"] = []
+    observation["enemy_units"] = []
+
+    # Unit tags
+    observation["own_tags"] = []
+    observation["ally_tags"] = []
+    observation["neutral_tags"] = []
+    observation["enemy_tags"] = []
+
+    # Unit positions (as a list of [x, y] integer coordinates)
+    # TODO Should we also include point objects/non-integer coordinates? Do we ever need this?
+    observation["own_pos"] = []
+    observation["ally_pos"] = []
+    observation["neutral_pos"] = []
+    observation["enemy_pos"] = []
+
+
+    # Fill out the observation dictionary
+    for unit in obs.units:
+      if unit.alliance == 1:
+        observation["own_units"].append(unit)
+        observation["own_tags"].append(unit.tag)
+        observation["own_pos"].append([int(unit.pos.x), int(unit.pos.y)])
+
+      elif unit.alliance == 2:
+        observation["ally_units"].append(unit)
+        observation["ally_tags"].append(unit.tag)
+        observation["ally_pos"].append([int(unit.pos.x), int(unit.pos.y)])
+
+      elif unit.alliance == 3:
+        observation["neutral_units"].append(unit)
+        observation["neutral_tags"].append(unit.tag)
+        observation["neutral_pos"].append([int(unit.pos.x), int(unit.pos.y)])
+
+      elif unit.alliance == 4:
+        observation["enemy_units"].append(unit)
+        observation["enemy_tags"].append(unit.tag)
+        observation["enemy_pos"].append([int(unit.pos.x), int(unit.pos.y)])
+
+    return observation
 
   def action_spec(self):
     """Look at Features for full specs."""
@@ -327,7 +392,7 @@ class SC2Env(environment.Base):
     self._obs = self._parallel.run(c.observe for c in self._controllers)
     agent_obs = [self._features.transform_obs(o.observation) for o in self._obs]
 
-    print(self._obs)
+    #print(self._obs)
     print("Available actions are", self._features.available_actions(self._obs[0].observation))
 
     # TODO(tewalds): How should we handle more than 2 agents and the case where
