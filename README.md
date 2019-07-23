@@ -1,5 +1,7 @@
 # MultiAgent-Systems-StarCraft2-Spring-AIResearch
 
+## CURRENT STATUS: Code is no longer maintained because another repository was found with wider functionality and options, see: https://github.com/Dentosal/python-sc2
+-------------------------------------------------------------------------------------------------------------------
 Contains:
 - Siraj Raval's code for SC2 demos
 - New modified code based on the pysc2 API to work with Raw Interface
